@@ -151,7 +151,15 @@ class ProjectAgent:
         joblib.dump(save_dict, path)
 
     def load(self):
-        path = os.getcwd() + "/models/best_model.pt"
+        # Construct the correct path to the file
+        path = os.path.join(os.path.dirname(__file__), "models", "best_model.pt")
+        path = os.path.abspath(path)
+
+        # Check if the file exists
+        if not os.path.exists(path):
+            raise FileNotFoundError(f"The file {path} does not exist.")
+        
+        # Load the file
         save_dict = joblib.load(path)
         self.models = save_dict['models']
         self.scalers = save_dict['scalers']
